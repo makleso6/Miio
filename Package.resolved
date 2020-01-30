@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "UDPBroadcastConnection",
+        "repositoryURL": "https://github.com/makleso6/UDPBroadcastConnection.git",
+        "state": {
+          "branch": null,
+          "revision": "2f0cfc8e97f61c9def2aa747f4bd0f01506fbdaf",
+          "version": "5.0.4"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

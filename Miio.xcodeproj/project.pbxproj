@@ -1,0 +1,838 @@
+// !$*UTF8*$!
+{
+   archiveVersion = "1";
+   objectVersion = "46";
+   objects = {
+      "Miio::Miio" = {
+         isa = "PBXNativeTarget";
+         buildConfigurationList = "OBJ_25";
+         buildPhases = (
+            "OBJ_28",
+            "OBJ_30"
+         );
+         dependencies = (
+            "OBJ_32"
+         );
+         name = "Miio";
+         productName = "Miio";
+         productReference = "Miio::Miio::Product";
+         productType = "com.apple.product-type.framework";
+      };
+      "Miio::Miio::Product" = {
+         isa = "PBXFileReference";
+         path = "Miio.framework";
+         sourceTree = "BUILT_PRODUCTS_DIR";
+      };
+      "Miio::MiioPackageTests::ProductTarget" = {
+         isa = "PBXAggregateTarget";
+         buildConfigurationList = "OBJ_41";
+         buildPhases = (
+         );
+         dependencies = (
+            "OBJ_44"
+         );
+         name = "MiioPackageTests";
+         productName = "MiioPackageTests";
+      };
+      "Miio::MiioTests" = {
+         isa = "PBXNativeTarget";
+         buildConfigurationList = "OBJ_46";
+         buildPhases = (
+            "OBJ_49",
+            "OBJ_52"
+         );
+         dependencies = (
+            "OBJ_55",
+            "OBJ_56"
+         );
+         name = "MiioTests";
+         productName = "MiioTests";
+         productReference = "Miio::MiioTests::Product";
+         productType = "com.apple.product-type.bundle.unit-test";
+      };
+      "Miio::MiioTests::Product" = {
+         isa = "PBXFileReference";
+         path = "MiioTests.xctest";
+         sourceTree = "BUILT_PRODUCTS_DIR";
+      };
+      "Miio::SwiftPMPackageDescription" = {
+         isa = "PBXNativeTarget";
+         buildConfigurationList = "OBJ_35";
+         buildPhases = (
+            "OBJ_38"
+         );
+         dependencies = (
+         );
+         name = "MiioPackageDescription";
+         productName = "MiioPackageDescription";
+         productType = "com.apple.product-type.framework";
+      };
+      "OBJ_1" = {
+         isa = "PBXProject";
+         attributes = {
+            LastSwiftMigration = "9999";
+            LastUpgradeCheck = "9999";
+         };
+         buildConfigurationList = "OBJ_2";
+         compatibilityVersion = "Xcode 3.2";
+         developmentRegion = "en";
+         hasScannedForEncodings = "0";
+         knownRegions = (
+            "en"
+         );
+         mainGroup = "OBJ_5";
+         productRefGroup = "OBJ_20";
+         projectDirPath = ".";
+         targets = (
+            "Miio::Miio",
+            "Miio::SwiftPMPackageDescription",
+            "Miio::MiioPackageTests::ProductTarget",
+            "Miio::MiioTests",
+            "UDPBroadcastConnection::UDPBroadcastConnection",
+            "UDPBroadcastConnection::SwiftPMPackageDescription"
+         );
+      };
+      "OBJ_10" = {
+         isa = "PBXGroup";
+         children = (
+            "OBJ_11"
+         );
+         name = "Tests";
+         path = "";
+         sourceTree = "SOURCE_ROOT";
+      };
+      "OBJ_11" = {
+         isa = "PBXGroup";
+         children = (
+            "OBJ_12",
+            "OBJ_13"
+         );
+         name = "MiioTests";
+         path = "Tests/MiioTests";
+         sourceTree = "SOURCE_ROOT";
+      };
+      "OBJ_12" = {
+         isa = "PBXFileReference";
+         path = "MiioTests.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_13" = {
+         isa = "PBXFileReference";
+         path = "XCTestManifests.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_14" = {
+         isa = "PBXGroup";
+         children = (
+            "OBJ_15"
+         );
+         name = "Dependencies";
+         path = "";
+         sourceTree = "<group>";
+      };
+      "OBJ_15" = {
+         isa = "PBXGroup";
+         children = (
+            "OBJ_16",
+            "OBJ_19"
+         );
+         name = "UDPBroadcastConnection 5.0.4";
+         path = "";
+         sourceTree = "SOURCE_ROOT";
+      };
+      "OBJ_16" = {
+         isa = "PBXGroup";
+         children = (
+            "OBJ_17",
+            "OBJ_18"
+         );
+         name = "UDPBroadcastConnection";
+         path = ".build/checkouts/UDPBroadcastConnection/Sources/UDPBroadcastConnection";
+         sourceTree = "SOURCE_ROOT";
+      };
+      "OBJ_17" = {
+         isa = "PBXFileReference";
+         path = "UDPBroadcastConnection.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_18" = {
+         isa = "PBXFileReference";
+         path = "UDPBroadcastConnectionError.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_19" = {
+         isa = "PBXFileReference";
+         explicitFileType = "sourcecode.swift";
+         name = "Package.swift";
+         path = "/Users/kolesnik/Miio/.build/checkouts/UDPBroadcastConnection/Package.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_2" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_3",
+            "OBJ_4"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_20" = {
+         isa = "PBXGroup";
+         children = (
+            "UDPBroadcastConnection::UDPBroadcastConnection::Product",
+            "Miio::Miio::Product",
+            "Miio::MiioTests::Product"
+         );
+         name = "Products";
+         path = "";
+         sourceTree = "BUILT_PRODUCTS_DIR";
+      };
+      "OBJ_25" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_26",
+            "OBJ_27"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_26" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            ENABLE_TESTABILITY = "YES";
+            FRAMEWORK_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(PLATFORM_DIR)/Developer/Library/Frameworks"
+            );
+            HEADER_SEARCH_PATHS = (
+               "$(inherited)"
+            );
+            INFOPLIST_FILE = "Miio.xcodeproj/Miio_Info.plist";
+            IPHONEOS_DEPLOYMENT_TARGET = "8.0";
+            LD_RUNPATH_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            OTHER_CFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_LDFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)"
+            );
+            PRODUCT_BUNDLE_IDENTIFIER = "Miio";
+            PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+            PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+            SKIP_INSTALL = "YES";
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)"
+            );
+            SWIFT_VERSION = "5.0";
+            TARGET_NAME = "Miio";
+            TVOS_DEPLOYMENT_TARGET = "9.0";
+            WATCHOS_DEPLOYMENT_TARGET = "2.0";
+         };
+         name = "Debug";
+      };
+      "OBJ_27" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            ENABLE_TESTABILITY = "YES";
+            FRAMEWORK_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(PLATFORM_DIR)/Developer/Library/Frameworks"
+            );
+            HEADER_SEARCH_PATHS = (
+               "$(inherited)"
+            );
+            INFOPLIST_FILE = "Miio.xcodeproj/Miio_Info.plist";
+            IPHONEOS_DEPLOYMENT_TARGET = "8.0";
+            LD_RUNPATH_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            OTHER_CFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_LDFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)"
+            );
+            PRODUCT_BUNDLE_IDENTIFIER = "Miio";
+            PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+            PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+            SKIP_INSTALL = "YES";
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)"
+            );
+            SWIFT_VERSION = "5.0";
+            TARGET_NAME = "Miio";
+            TVOS_DEPLOYMENT_TARGET = "9.0";
+            WATCHOS_DEPLOYMENT_TARGET = "2.0";
+         };
+         name = "Release";
+      };
+      "OBJ_28" = {
+         isa = "PBXSourcesBuildPhase";
+         files = (
+            "OBJ_29"
+         );
+      };
+      "OBJ_29" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_9";
+      };
+      "OBJ_3" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            CLANG_ENABLE_OBJC_ARC = "YES";
+            COMBINE_HIDPI_IMAGES = "YES";
+            COPY_PHASE_STRIP = "NO";
+            DEBUG_INFORMATION_FORMAT = "dwarf";
+            DYLIB_INSTALL_NAME_BASE = "@rpath";
+            ENABLE_NS_ASSERTIONS = "YES";
+            GCC_OPTIMIZATION_LEVEL = "0";
+            GCC_PREPROCESSOR_DEFINITIONS = (
+               "$(inherited)",
+               "SWIFT_PACKAGE=1",
+               "DEBUG=1"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            ONLY_ACTIVE_ARCH = "YES";
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)",
+               "-DXcode"
+            );
+            PRODUCT_NAME = "$(TARGET_NAME)";
+            SDKROOT = "macosx";
+            SUPPORTED_PLATFORMS = (
+               "macosx",
+               "iphoneos",
+               "iphonesimulator",
+               "appletvos",
+               "appletvsimulator",
+               "watchos",
+               "watchsimulator"
+            );
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)",
+               "SWIFT_PACKAGE",
+               "DEBUG"
+            );
+            SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+            USE_HEADERMAP = "NO";
+         };
+         name = "Debug";
+      };
+      "OBJ_30" = {
+         isa = "PBXFrameworksBuildPhase";
+         files = (
+            "OBJ_31"
+         );
+      };
+      "OBJ_31" = {
+         isa = "PBXBuildFile";
+         fileRef = "UDPBroadcastConnection::UDPBroadcastConnection::Product";
+      };
+      "OBJ_32" = {
+         isa = "PBXTargetDependency";
+         target = "UDPBroadcastConnection::UDPBroadcastConnection";
+      };
+      "OBJ_35" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_36",
+            "OBJ_37"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_36" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            LD = "/usr/bin/true";
+            OTHER_SWIFT_FLAGS = (
+               "-swift-version",
+               "5",
+               "-I",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
+               "-target",
+               "x86_64-apple-macosx10.10",
+               "-sdk",
+               "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk",
+               "-package-description-version",
+               "5.1"
+            );
+            SWIFT_VERSION = "5.0";
+         };
+         name = "Debug";
+      };
+      "OBJ_37" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            LD = "/usr/bin/true";
+            OTHER_SWIFT_FLAGS = (
+               "-swift-version",
+               "5",
+               "-I",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
+               "-target",
+               "x86_64-apple-macosx10.10",
+               "-sdk",
+               "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk",
+               "-package-description-version",
+               "5.1"
+            );
+            SWIFT_VERSION = "5.0";
+         };
+         name = "Release";
+      };
+      "OBJ_38" = {
+         isa = "PBXSourcesBuildPhase";
+         files = (
+            "OBJ_39"
+         );
+      };
+      "OBJ_39" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_6";
+      };
+      "OBJ_4" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            CLANG_ENABLE_OBJC_ARC = "YES";
+            COMBINE_HIDPI_IMAGES = "YES";
+            COPY_PHASE_STRIP = "YES";
+            DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+            DYLIB_INSTALL_NAME_BASE = "@rpath";
+            GCC_OPTIMIZATION_LEVEL = "s";
+            GCC_PREPROCESSOR_DEFINITIONS = (
+               "$(inherited)",
+               "SWIFT_PACKAGE=1"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)",
+               "-DXcode"
+            );
+            PRODUCT_NAME = "$(TARGET_NAME)";
+            SDKROOT = "macosx";
+            SUPPORTED_PLATFORMS = (
+               "macosx",
+               "iphoneos",
+               "iphonesimulator",
+               "appletvos",
+               "appletvsimulator",
+               "watchos",
+               "watchsimulator"
+            );
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)",
+               "SWIFT_PACKAGE"
+            );
+            SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+            USE_HEADERMAP = "NO";
+         };
+         name = "Release";
+      };
+      "OBJ_41" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_42",
+            "OBJ_43"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_42" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+         };
+         name = "Debug";
+      };
+      "OBJ_43" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+         };
+         name = "Release";
+      };
+      "OBJ_44" = {
+         isa = "PBXTargetDependency";
+         target = "Miio::MiioTests";
+      };
+      "OBJ_46" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_47",
+            "OBJ_48"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_47" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            CLANG_ENABLE_MODULES = "YES";
+            EMBEDDED_CONTENT_CONTAINS_SWIFT = "YES";
+            FRAMEWORK_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(PLATFORM_DIR)/Developer/Library/Frameworks"
+            );
+            HEADER_SEARCH_PATHS = (
+               "$(inherited)"
+            );
+            INFOPLIST_FILE = "Miio.xcodeproj/MiioTests_Info.plist";
+            IPHONEOS_DEPLOYMENT_TARGET = "8.0";
+            LD_RUNPATH_SEARCH_PATHS = (
+               "$(inherited)",
+               "@loader_path/../Frameworks",
+               "@loader_path/Frameworks"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            OTHER_CFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_LDFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)"
+            );
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)"
+            );
+            SWIFT_VERSION = "5.0";
+            TARGET_NAME = "MiioTests";
+            TVOS_DEPLOYMENT_TARGET = "9.0";
+            WATCHOS_DEPLOYMENT_TARGET = "2.0";
+         };
+         name = "Debug";
+      };
+      "OBJ_48" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            CLANG_ENABLE_MODULES = "YES";
+            EMBEDDED_CONTENT_CONTAINS_SWIFT = "YES";
+            FRAMEWORK_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(PLATFORM_DIR)/Developer/Library/Frameworks"
+            );
+            HEADER_SEARCH_PATHS = (
+               "$(inherited)"
+            );
+            INFOPLIST_FILE = "Miio.xcodeproj/MiioTests_Info.plist";
+            IPHONEOS_DEPLOYMENT_TARGET = "8.0";
+            LD_RUNPATH_SEARCH_PATHS = (
+               "$(inherited)",
+               "@loader_path/../Frameworks",
+               "@loader_path/Frameworks"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            OTHER_CFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_LDFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)"
+            );
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)"
+            );
+            SWIFT_VERSION = "5.0";
+            TARGET_NAME = "MiioTests";
+            TVOS_DEPLOYMENT_TARGET = "9.0";
+            WATCHOS_DEPLOYMENT_TARGET = "2.0";
+         };
+         name = "Release";
+      };
+      "OBJ_49" = {
+         isa = "PBXSourcesBuildPhase";
+         files = (
+            "OBJ_50",
+            "OBJ_51"
+         );
+      };
+      "OBJ_5" = {
+         isa = "PBXGroup";
+         children = (
+            "OBJ_6",
+            "OBJ_7",
+            "OBJ_10",
+            "OBJ_14",
+            "OBJ_20"
+         );
+         path = "";
+         sourceTree = "<group>";
+      };
+      "OBJ_50" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_12";
+      };
+      "OBJ_51" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_13";
+      };
+      "OBJ_52" = {
+         isa = "PBXFrameworksBuildPhase";
+         files = (
+            "OBJ_53",
+            "OBJ_54"
+         );
+      };
+      "OBJ_53" = {
+         isa = "PBXBuildFile";
+         fileRef = "Miio::Miio::Product";
+      };
+      "OBJ_54" = {
+         isa = "PBXBuildFile";
+         fileRef = "UDPBroadcastConnection::UDPBroadcastConnection::Product";
+      };
+      "OBJ_55" = {
+         isa = "PBXTargetDependency";
+         target = "Miio::Miio";
+      };
+      "OBJ_56" = {
+         isa = "PBXTargetDependency";
+         target = "UDPBroadcastConnection::UDPBroadcastConnection";
+      };
+      "OBJ_57" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_58",
+            "OBJ_59"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_58" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            ENABLE_TESTABILITY = "YES";
+            FRAMEWORK_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(PLATFORM_DIR)/Developer/Library/Frameworks"
+            );
+            HEADER_SEARCH_PATHS = (
+               "$(inherited)"
+            );
+            INFOPLIST_FILE = "Miio.xcodeproj/UDPBroadcastConnection_Info.plist";
+            IPHONEOS_DEPLOYMENT_TARGET = "8.0";
+            LD_RUNPATH_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            OTHER_CFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_LDFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)"
+            );
+            PRODUCT_BUNDLE_IDENTIFIER = "UDPBroadcastConnection";
+            PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+            PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+            SKIP_INSTALL = "YES";
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)"
+            );
+            SWIFT_VERSION = "5.0";
+            TARGET_NAME = "UDPBroadcastConnection";
+            TVOS_DEPLOYMENT_TARGET = "9.0";
+            WATCHOS_DEPLOYMENT_TARGET = "2.0";
+         };
+         name = "Debug";
+      };
+      "OBJ_59" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            ENABLE_TESTABILITY = "YES";
+            FRAMEWORK_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(PLATFORM_DIR)/Developer/Library/Frameworks"
+            );
+            HEADER_SEARCH_PATHS = (
+               "$(inherited)"
+            );
+            INFOPLIST_FILE = "Miio.xcodeproj/UDPBroadcastConnection_Info.plist";
+            IPHONEOS_DEPLOYMENT_TARGET = "8.0";
+            LD_RUNPATH_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            OTHER_CFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_LDFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)"
+            );
+            PRODUCT_BUNDLE_IDENTIFIER = "UDPBroadcastConnection";
+            PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+            PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+            SKIP_INSTALL = "YES";
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)"
+            );
+            SWIFT_VERSION = "5.0";
+            TARGET_NAME = "UDPBroadcastConnection";
+            TVOS_DEPLOYMENT_TARGET = "9.0";
+            WATCHOS_DEPLOYMENT_TARGET = "2.0";
+         };
+         name = "Release";
+      };
+      "OBJ_6" = {
+         isa = "PBXFileReference";
+         explicitFileType = "sourcecode.swift";
+         path = "Package.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_60" = {
+         isa = "PBXSourcesBuildPhase";
+         files = (
+            "OBJ_61",
+            "OBJ_62"
+         );
+      };
+      "OBJ_61" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_17";
+      };
+      "OBJ_62" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_18";
+      };
+      "OBJ_63" = {
+         isa = "PBXFrameworksBuildPhase";
+         files = (
+         );
+      };
+      "OBJ_65" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_66",
+            "OBJ_67"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_66" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            LD = "/usr/bin/true";
+            OTHER_SWIFT_FLAGS = (
+               "-swift-version",
+               "5",
+               "-I",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
+               "-target",
+               "x86_64-apple-macosx10.10",
+               "-sdk",
+               "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk",
+               "-package-description-version",
+               "5"
+            );
+            SWIFT_VERSION = "5.0";
+         };
+         name = "Debug";
+      };
+      "OBJ_67" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            LD = "/usr/bin/true";
+            OTHER_SWIFT_FLAGS = (
+               "-swift-version",
+               "5",
+               "-I",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
+               "-target",
+               "x86_64-apple-macosx10.10",
+               "-sdk",
+               "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk",
+               "-package-description-version",
+               "5"
+            );
+            SWIFT_VERSION = "5.0";
+         };
+         name = "Release";
+      };
+      "OBJ_68" = {
+         isa = "PBXSourcesBuildPhase";
+         files = (
+            "OBJ_69"
+         );
+      };
+      "OBJ_69" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_19";
+      };
+      "OBJ_7" = {
+         isa = "PBXGroup";
+         children = (
+            "OBJ_8"
+         );
+         name = "Sources";
+         path = "";
+         sourceTree = "SOURCE_ROOT";
+      };
+      "OBJ_8" = {
+         isa = "PBXGroup";
+         children = (
+            "OBJ_9"
+         );
+         name = "Miio";
+         path = "Sources/Miio";
+         sourceTree = "SOURCE_ROOT";
+      };
+      "OBJ_9" = {
+         isa = "PBXFileReference";
+         path = "Miio.swift";
+         sourceTree = "<group>";
+      };
+      "UDPBroadcastConnection::SwiftPMPackageDescription" = {
+         isa = "PBXNativeTarget";
+         buildConfigurationList = "OBJ_65";
+         buildPhases = (
+            "OBJ_68"
+         );
+         dependencies = (
+         );
+         name = "UDPBroadcastConnectionPackageDescription";
+         productName = "UDPBroadcastConnectionPackageDescription";
+         productType = "com.apple.product-type.framework";
+      };
+      "UDPBroadcastConnection::UDPBroadcastConnection" = {
+         isa = "PBXNativeTarget";
+         buildConfigurationList = "OBJ_57";
+         buildPhases = (
+            "OBJ_60",
+            "OBJ_63"
+         );
+         dependencies = (
+         );
+         name = "UDPBroadcastConnection";
+         productName = "UDPBroadcastConnection";
+         productReference = "UDPBroadcastConnection::UDPBroadcastConnection::Product";
+         productType = "com.apple.product-type.framework";
+      };
+      "UDPBroadcastConnection::UDPBroadcastConnection::Product" = {
+         isa = "PBXFileReference";
+         path = "UDPBroadcastConnection.framework";
+         sourceTree = "BUILT_PRODUCTS_DIR";
+      };
+   };
+   rootObject = "OBJ_1";
+}

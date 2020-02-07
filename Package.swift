@@ -12,7 +12,13 @@ let package = Package(
             targets: ["Miio"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/makleso6/UDPBroadcastConnection.git", from: "5.0.4"),
+//        .package(url: "https://github.com/makleso6/UDPBroadcastConnection.git", from: "5.0.4"),
+        .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
+        .package(url: "https://github.com/apple/swift-nio.git", from: "2.13.0"),
+        .package(url: "https://github.com/IBM-Swift/BlueCryptor.git", from: "1.0.21"),
+
+        
+
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
     ],
@@ -21,7 +27,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "Miio",
-            dependencies: ["UDPBroadcastConnection"]),
+            dependencies: ["NIO", "Logging", "Cryptor"]),
         .testTarget(
             name: "MiioTests",
             dependencies: ["Miio"]),

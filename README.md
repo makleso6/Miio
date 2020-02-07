@@ -1,2 +1,3 @@
 # Miio
-Miio protocol written is Swift
+
+A description of this package.

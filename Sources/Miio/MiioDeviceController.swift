@@ -28,9 +28,7 @@ public enum DeviceControllerError: Error {
 }
 
 public class MiioDeviceController: Logable {
-    
-    
-    
+        
     private struct _IndexedRequest: MIIORequest {
         let method: Method
         let params: Params
@@ -41,7 +39,6 @@ public class MiioDeviceController: Logable {
             params = request.params
             self.id = id
         }
-        
     }
     
     private enum Consts {
@@ -51,7 +48,7 @@ public class MiioDeviceController: Logable {
     public typealias ResultType = Result<ResponseType, Error>
     public typealias OnResult = (ResultType) -> Void
     
-    private var onHandshake: (() -> Void)?
+    private var onHandshake: ((Result<Void, Error>) -> Void)?
     lazy var delayWorker: DelayWorker = {
         return ReadyDelayWorker()
     }()
@@ -67,10 +64,11 @@ public class MiioDeviceController: Logable {
     private var device: Device
     private let networkService: NetworkService
     
-    private var handshakeTimer: DispatchSourceTimer = DispatchSource.makeTimerSource()
+    private var handshakeTimer: DispatchSourceTimer?
     
-    private var map: [UInt: OnResult] = [:]
-    
+    private var requestMap: [UInt: OnResult] = [:]
+    private var timerMap: [UInt: DispatchSourceTimer] = [:]
+
     public init(networkService: NetworkService,
                 device: Device) {
         self.networkService = networkService
@@ -78,8 +76,7 @@ public class MiioDeviceController: Logable {
     }
     
     private var needsHandshake: Bool {
-        //return ! this._token || (Date.now() - this._serverStampTime) > 120000;
-        return true
+        return Date().timeIntervalSince1970 - serverStamp > 120
     }
     
     private var tokenData: [UInt8] {
@@ -102,31 +99,17 @@ public class MiioDeviceController: Logable {
         var _buffer = buffer
         _buffer.moveReaderIndex(to: 0)
         _buffer.moveWriterIndex(to: 32)
-        
-        
-        if let slice = _buffer.getSlice(at: 0, length: 32) {
-            print(slice.readableBytesView.map({ "\($0)" }).joined(separator: ","))
-        }
-        if let id = buffer.getInteger(at: 8, endianness: .big, as: UInt32.self),
-        let stamp = buffer.getInteger(at: 12, endianness: .big, as: UInt32.self) {
-            print(id)
-            print(stamp)
-
-        }
 
         
         let encrypted: [UInt8] = {
-            var __buffer = buffer
-            __buffer.moveReaderIndex(to: 32)
-            return [UInt8](__buffer.readableBytesView)
+            var _buffer = buffer
+            _buffer.moveReaderIndex(to: 32)
+            return [UInt8](_buffer.readableBytesView)
         }()
-        
-        print("encrypted", encrypted)
-        
+                
         if
             let tokenKey = self.tokenKey,
             let tokenIV = self.tokenIV,
-//            let encrypted2 = _buffer.readBytes(length: <#T##Int#>),
             let sliced = _buffer.getSlice(at: 0, length: 16)?.readableBytesView,
             let digest =  Digest(using:.md5)
                 .update(byteArray: [UInt8](sliced))?
@@ -136,13 +119,24 @@ public class MiioDeviceController: Logable {
 //            print("checksum",digest)
             do {
                 let data = try self.aes([UInt8](encrypted), key: tokenKey, iv: tokenIV, operation: .decrypt)
-                let string = String(data: .init(data), encoding: .utf8)
-                
-                print("string", string)
+//                print([UInt8](data))
+//                guard let string = String(bytes: data, encoding: .utf8) else { return }
+//                print("string", string)
 
-                //                print("data", data)
+//                let regular = try NSRegularExpression(pattern: "[\\x00-\\x09\\x0B-\\x0C\\x0E-\\x1F\\x7F-\\x9F]/g",
+//                                                      options: NSRegularExpression.Options.caseInsensitive)
+//                let replacedString =
+//                regular.stringByReplacingMatches(in: string,
+//                                                 options: [],
+//                                                 range: NSMakeRange(0, string.count),
+//                                                 withTemplate: "")
+//                print("replacedString", replacedString)
+//                print([UInt8](replacedString.data(using: .utf8)!))
+
                 let response = try JSONDecoder().decode(ResponseType.self, from: .init(data))
-                map[response.id]?(.success(response))
+                print(response)
+                requestMap.removeValue(forKey: response.id)?(.success(response))
+                timerMap.removeValue(forKey: response.id)?.cancel()
             } catch {
                 print(error)
             }
@@ -157,8 +151,18 @@ extension MiioDeviceController: DeviceController {
     public typealias ResponseType = AnyMIIOResponse
     
     
-    public func handshake(completion: @escaping () -> Void) {
+    public func handshake(completion: @escaping (Result<Void, Error>) -> Void) {
         self.onHandshake = completion
+        
+        let timer = DispatchSource.makeTimerSource()
+        handshakeTimer = timer
+        timer.schedule(deadline: .now() + .seconds(2))
+        timer.setEventHandler {
+            timer.cancel()
+            completion(.failure(DeviceControllerError.requestTimeOut))
+        }
+        timer.resume()
+        
         do {
             isDiscovering = true
             try networkService.send(bytes: Handshake(),
@@ -166,30 +170,25 @@ extension MiioDeviceController: DeviceController {
                                     port: Consts.port)
         } catch {
             isDiscovering = false
-            print(error)
         }
     }
     
-    private func _handshake(completion: @escaping (Result<Void, Error>) -> Void) {
-        let timer = DispatchSource.makeTimerSource()
-        self.handshakeTimer = timer
-        timer.schedule(deadline: .now() + .seconds(2))
-        timer.setEventHandler {
-            timer.cancel()
-            completion(.failure(DeviceControllerError.requestTimeOut))
-        }
-        timer.resume()
-    }
-    
-    public func send(request: RequestType, completion: @escaping (Result<ResponseType, Error>) -> Void) {
-
+    private func _send(request: RequestType, completion: @escaping (Result<ResponseType, Error>) -> Void) {
         guard let id = self.iterator.next() else { return }
-        
-        let _request = _IndexedRequest(request: request, id: id)
-        self.map[id] = completion
-        
         delayWorker.performDelay(execute: { [weak self] in
             guard let self = self else { return }
+            let _request = _IndexedRequest(request: request, id: id)
+            self.requestMap[id] = completion
+            
+            let timer = DispatchSource.makeTimerSource()
+            timer.schedule(deadline: .now() + .seconds(2))
+            timer.setEventHandler {
+                timer.cancel()
+                completion(.failure(DeviceControllerError.requestTimeOut))
+            }
+            timer.resume()
+            self.timerMap[id] = timer
+            
             var buffer = ByteBuffer(.init(self._buffer))
             
             buffer.setBytes([UInt8](repeating: 0x00, count: 4), at: 4)
@@ -203,7 +202,6 @@ extension MiioDeviceController: DeviceController {
             {
                 do {
                     let data = try JSONEncoder().encode(_request)
-                    print(String.init(data: data, encoding: .utf8)!)
                     let encrypt = try self.aes(.init(data), key: tokenKey, iv: tokenIV, operation: .encrypt)
                     buffer.setInteger(UInt16(encrypt.count + 32), at: 2)
                     
@@ -218,12 +216,10 @@ extension MiioDeviceController: DeviceController {
                         
                         buffer.writeBytes(encrypt)//setBytes(encrypt, at: buffer.capacity)
                         let header = [UInt8](buffer.readableBytesView)
-                        let final = header// + encrypt
-
-                        try self.networkService.send(bytes: final,
+                        
+                        try self.networkService.send(bytes: header,
                                                      to: self.device.ipAddress,
                                                      port: Consts.port)
-                        print("final", final.map({ "\($0)" }).joined(separator: ","))
                     } else {
                         self.loger.warning("something goes wrong")
                     }
@@ -234,7 +230,25 @@ extension MiioDeviceController: DeviceController {
                 self.loger.warning("something goes wrong")
             }
         })
+    }
+    
+    public func send(request: RequestType, completion: @escaping (Result<ResponseType, Error>) -> Void) {
         
+        if needsHandshake {
+            handshake(completion: { [weak self] (result) in
+                guard let self = self else { return }
+                do {
+                    try result.get()
+                    self._send(request: request, completion: completion)
+
+                } catch {
+                    completion(.failure(error))
+                }
+            })
+        } else {
+            _send(request: request, completion: completion)
+        }
+                
     }
     
     private func aes(_ bytes: [UInt8], key: [UInt8], iv: [UInt8], operation: StreamCryptor.Operation) throws -> [UInt8] {
@@ -253,158 +267,27 @@ extension MiioDeviceController: OutboundHandler {
     public func recive(result: Result<(AddressedEnvelope<ByteBuffer>), Error>) {
         do {
             let envelope = try result.get()
-            print("capacity: ", envelope.data.readableBytesView.count)
-            print("readableBytesView: ", [UInt8](envelope.data.readableBytesView))
             guard let id = envelope.data.getInteger(at: 8, endianness: .big, as: UInt32.self) else { return }
             if let stamp = envelope.data.getInteger(at: 12, endianness: .big, as: UInt32.self) {
                 self.deviceUptime = stamp
                 self.serverStamp = Date().timeIntervalSince1970
             }
 
-            var _buffer = envelope.data
-            _buffer.moveReaderIndex(to: 0)
-            _buffer.moveWriterIndex(to: 32)
-            if isDiscovering, let slice = _buffer.getSlice(at: 0, length: 32) {
-                self._buffer = slice
+            var buffer = envelope.data
+            buffer.moveReaderIndex(to: 0)
+            buffer.moveWriterIndex(to: 32)
+            if isDiscovering, let slice = buffer.getSlice(at: 0, length: 32) {
+                _buffer = slice
+                delayWorker.call()
+                handshakeTimer?.cancel()
+                onHandshake?(.success(()))
             } else {
-                self.decrypt(response: envelope.data)
+                decrypt(response: envelope.data)
             }
         } catch {
             loger.error("\(error)")
         }
-        
-        if isDiscovering {
-            onHandshake?()
-            delayWorker.call()
-        }
-        
         isDiscovering = false
 
     }
 }
-
-final class BlockGenerator<T> {
-    typealias BlockType = (T) -> Void
-
-    private let innerHandler: BlockType
-    
-    init(handler: @escaping BlockType) {
-        innerHandler = handler
-    }
-    
-    func run(_ value: T) {
-        innerHandler(value)
-    }
-}
-
-protocol DelayWorker: AnyObject {
-    func reset()
-    func call()
-    func performDelay(execute block: @escaping () -> Void)
-}
-
-final class ReadyDelayWorker: DelayWorker {
-    var blocks: [BlockGenerator<Void>] = []
-    private var flag = false
-
-    func performDelay(execute block: @escaping () -> Void) {
-        if flag {
-            block()
-        } else {
-            blocks.append(.init(handler: block))
-        }
-    }
-    func reset() {
-        flag = false
-    }
-}
-
-extension ReadyDelayWorker {
-    func call() {
-        flag = true
-        for block in blocks {
-            block.run(())
-        }
-        blocks.removeAll()
-    }
-}
-
-
-//    public func info() throws {
-////        delayWorker.performDelay(execute: { [weak self] in
-////            guard let self = self else { return }
-////            var buffer = ByteBuffer(.init(self._buffer))
-////        })
-//
-//        /*
-//        let secondPassed = UInt32(Date().timeIntervalSince1970) - UInt32(self.serverStamp)
-//        print("secondPassed", secondPassed)
-//        let deviceUpTime = secondPassed + self.stamp
-//        buffer.moveWriterIndex(to: 12)
-//        buffer.writeInteger(deviceUpTime)
-//        */
-//
-//        var packet: [UInt8] = .init(repeating: 0, count: 32)
-//        packet[0] = 0x21
-//        packet[1] = 0x31
-//        packet[3] = 0x20
-//        for index in 4..<32 {
-//            packet[index] = 0xff
-//        }
-//        for index in 4..<8 {
-//            packet[index] = 0x00
-//        }
-//
-//        var buffer = ByteBuffer(.init(packet))
-//
-//        /*
-//         let info = Info(method: "miIO.info")
-//         let data = try JSONEncoder().encode(info)
-//         let string = String(data: data, encoding: .utf8)
-//         //        print(string)
-//         */
-//
-//        let request = """
-//{"method":"miIO.info","id":1}
-//"""
-//        let data = request.data(using: .utf8)!
-//
-//        let uptime: UInt32 = 103075
-//        buffer.moveWriterIndex(to: 12)
-//        buffer.writeInteger(uptime)
-//        print("buffer with uptime", [UInt8](buffer.readableBytesView))
-//
-//        let tokenData = CryptoUtils.byteArray(fromHex: self.device.token)
-//        if let tokenKey = Digest(using:.md5).update(byteArray: tokenData)?.final() {
-//            if let tokenIV = Digest(using:.md5).update(byteArray: tokenKey)?.update(byteArray: tokenData)?.final() {
-//
-//                let encrypt = try self.aes(.init(data), key: tokenKey, iv: tokenIV)
-//                print("encrypt", encrypt)
-//                buffer.moveWriterIndex(to: 2)
-////                buffer.writeInteger(UInt16(encrypt.count + 32))
-//                buffer.setInteger(UInt16(encrypt.count + 32), at: 2)
-////                buffer.moveWriterIndex(to: buffer.capacity)
-//                print("buffer with encrypt count", [UInt8](buffer.readableBytesView))
-////                print(buffer)
-//                buffer.moveWriterIndex(to: 16)
-//                buffer.moveReaderIndex(to: 0)
-////                if let slice = buffer.readSlice(length: 16)
-//                if let sliced = buffer.readSlice(length: 16)?.readableBytesView,
-//                    let digest = Digest(using:.md5)
-//                        .update(byteArray: .init(sliced))?
-//                        .update(byteArray: tokenData)?
-//                        .update(byteArray: encrypt)?
-//                        .final() {
-//                    print("sliced", [UInt8](sliced))
-//                    print("digest", [UInt8](digest))
-//                    buffer.moveWriterIndex(to: 16)
-//                    buffer.writeBytes(digest)
-//
-//                    buffer.moveReaderIndex(to: 0)
-//                    buffer.moveWriterIndex(to: buffer.capacity)
-//
-//                    print("buffer with digest", [UInt8](buffer.readableBytesView))
-//                }
-//            }
-//        }
-//    }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Handshake: Request {
+public struct Handshake: NIORequest {
     public var packet: [UInt8]
     public init() {
         packet = .init(repeating: 0, count: 32)

@@ -7,6 +7,7 @@
 
 import NIO
 import Logging
+import Foundation
 
 public final class NIOChanelInboundHandler: ChannelInboundHandler, Logable {
     
@@ -20,7 +21,10 @@ public final class NIOChanelInboundHandler: ChannelInboundHandler, Logable {
     public func channelRead(context: ChannelHandlerContext, data: NIOAny) {
         let addressedEnvelope = unwrapInboundIn(data)
         loger.debug("\(String(describing: addressedEnvelope.remoteAddress.ipAddress))")
-        outboundHandler?.recive(result: .success(addressedEnvelope))
+        DispatchQueue.global().asyncAfter(deadline: .now() + 1, execute: { [weak self] in
+            self?
+                .outboundHandler?.recive(result: .success(addressedEnvelope))
+        })
     }
 
     public func channelReadComplete(context: ChannelHandlerContext) {

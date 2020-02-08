@@ -8,5 +8,7 @@
 import Foundation
 
 public protocol DeviceController {
-    func send<RequestType>(request: RequestType) where RequestType: Encodable
+    associatedtype RequestType: Encodable
+    associatedtype ResponseType: Decodable
+    func send(request: RequestType, completion: @escaping (Result<ResponseType, Error>) -> Void)
 }

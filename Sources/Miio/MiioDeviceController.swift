@@ -9,17 +9,26 @@ import Foundation
 import NIO
 import Logging
 import Cryptor
+import AnyCodable
 
 public struct UIntIterator: IteratorProtocol {
     
     private var value: UInt = 1
     
-    public mutating func next() -> UInt? {
+    public mutating func _next(_ increment: UInt) -> UInt? {
         if value > 10000 {
             value = 0
         }
-        value += 50
+        value += increment
         return value
+    }
+    
+    public mutating func failed() -> UInt? {
+        return _next(100)
+    }
+
+    public mutating func next() -> UInt? {
+        return _next(1)
     }
 }
 
@@ -29,11 +38,16 @@ public enum DeviceControllerError: Error {
 
 public class MiioDeviceController: Logable {
         
-    private struct _IndexedRequest: MIIORequest {
-        let method: Method
-        let params: Params
-        let id: UInt
-        init(request: MIIORequest,
+    private struct _IndexedRequest: MiioRequest {
+        private enum CodingKeys: String, CodingKey {
+            case method, id
+            case _params = "params"
+        }
+                
+        var method: Method
+        var params: ParamsConverible
+        var id: UInt
+        init(request: MiioRequest,
              id: UInt) {
             method = request.method
             params = request.params
@@ -45,7 +59,7 @@ public class MiioDeviceController: Logable {
         static var port: Int = 54321
     }
     
-    public typealias ResultType = Result<ResponseType, Error>
+    public typealias ResultType = Result<MiioResponse, Error>
     public typealias OnResult = (ResultType) -> Void
     
     private var onHandshake: ((Result<Void, Error>) -> Void)?
@@ -119,24 +133,10 @@ public class MiioDeviceController: Logable {
 //            print("checksum",digest)
             do {
                 let data = try self.aes([UInt8](encrypted), key: tokenKey, iv: tokenIV, operation: .decrypt)
-//                print([UInt8](data))
-//                guard let string = String(bytes: data, encoding: .utf8) else { return }
-//                print("string", string)
-
-//                let regular = try NSRegularExpression(pattern: "[\\x00-\\x09\\x0B-\\x0C\\x0E-\\x1F\\x7F-\\x9F]/g",
-//                                                      options: NSRegularExpression.Options.caseInsensitive)
-//                let replacedString =
-//                regular.stringByReplacingMatches(in: string,
-//                                                 options: [],
-//                                                 range: NSMakeRange(0, string.count),
-//                                                 withTemplate: "")
-//                print("replacedString", replacedString)
-//                print([UInt8](replacedString.data(using: .utf8)!))
-
-                let response = try JSONDecoder().decode(ResponseType.self, from: .init(data))
-                print(response)
-                requestMap.removeValue(forKey: response.id)?(.success(response))
-                timerMap.removeValue(forKey: response.id)?.cancel()
+                let response = try JSONDecoder().decode(AnyMiioResponse.self, from: .init(data))
+                let id = response.id
+                requestMap.removeValue(forKey: id)?(.success(response))
+                timerMap.removeValue(forKey: id)?.cancel()
             } catch {
                 print(error)
             }
@@ -146,10 +146,7 @@ public class MiioDeviceController: Logable {
     
 }
 
-extension MiioDeviceController: DeviceController {
-    public typealias RequestType = AnyMIIORequest
-    public typealias ResponseType = AnyMIIOResponse
-    
+extension MiioDeviceController: DeviceController {    
     
     public func handshake(completion: @escaping (Result<Void, Error>) -> Void) {
         self.onHandshake = completion
@@ -173,7 +170,7 @@ extension MiioDeviceController: DeviceController {
         }
     }
     
-    private func _send(request: RequestType, completion: @escaping (Result<ResponseType, Error>) -> Void) {
+    private func _send(request: MiioRequest, completion: @escaping (Result<MiioResponse, Error>) -> Void) {
         guard let id = self.iterator.next() else { return }
         delayWorker.performDelay(execute: { [weak self] in
             guard let self = self else { return }
@@ -232,8 +229,7 @@ extension MiioDeviceController: DeviceController {
         })
     }
     
-    public func send(request: RequestType, completion: @escaping (Result<ResponseType, Error>) -> Void) {
-        
+    public func send(request: MiioRequest, completion: @escaping (Result<MiioResponse, Error>) -> Void) {
         if needsHandshake {
             handshake(completion: { [weak self] (result) in
                 guard let self = self else { return }
@@ -248,7 +244,20 @@ extension MiioDeviceController: DeviceController {
         } else {
             _send(request: request, completion: completion)
         }
-                
+    }
+    
+    public func send<R>(request: R, result completion: @escaping (Result<R.ResponseSerializerType.EntityType, Error>) -> Void) where R: RequestTargetType {
+        self.send(request: request, completion: { (result) in
+            switch result {
+            case .success(let response):
+                completion(.init(catching: {
+                    let result = try response.result.get()
+                    return try request.serializer.process(result)
+                }))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        })
     }
     
     private func aes(_ bytes: [UInt8], key: [UInt8], iv: [UInt8], operation: StreamCryptor.Operation) throws -> [UInt8] {

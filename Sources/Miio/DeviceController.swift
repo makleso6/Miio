@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol DeviceController {
-    associatedtype RequestType: Encodable
-    associatedtype ResponseType: Decodable
-    func send(request: RequestType, completion: @escaping (Result<ResponseType, Error>) -> Void)
+    func send(request: MiioRequest, completion: @escaping (Result<MiioResponse, Error>) -> Void)
+    func send<R>(request: R, result: @escaping (Result<R.ResponseSerializerType.EntityType, Error>) -> Void) where R: RequestTargetType
+
 }

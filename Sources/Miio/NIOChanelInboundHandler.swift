@@ -20,8 +20,8 @@ public final class NIOChanelInboundHandler: ChannelInboundHandler, Logable {
     
     public func channelRead(context: ChannelHandlerContext, data: NIOAny) {
         self._data = data
-        let addressedEnvelope = unwrapInboundIn(data)
-        loger.debug("\(String(describing: addressedEnvelope.remoteAddress.ipAddress))")
+//        let addressedEnvelope = unwrapInboundIn(data)
+//        loger.debug("\(String(describing: addressedEnvelope.remoteAddress.ipAddress))")
 //        DispatchQueue.global().asyncAfter(deadline: .now() + 1, execute: { [weak self] in
 //            self?
 //                .outboundHandler?.recive(result: .success(addressedEnvelope))
@@ -29,7 +29,7 @@ public final class NIOChanelInboundHandler: ChannelInboundHandler, Logable {
     }
 
     public func channelReadComplete(context: ChannelHandlerContext) {
-        loger.debug("channelReadComplete")
+//        loger.debug("channelReadComplete")
         context.flush()
         
         if let data = _data {

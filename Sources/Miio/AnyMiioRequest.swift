@@ -8,12 +8,6 @@
 import Foundation
 
 public struct AnyMiioRequest: MiioRequest {
-    private enum CodingKeys: String, CodingKey {
-        case method
-        case _params = "params"
-        case id
-    }
-
     public let method: Method
     public let params: ParamsConverible
     public var id: UInt

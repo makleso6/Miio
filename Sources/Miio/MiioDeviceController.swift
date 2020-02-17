@@ -40,13 +40,12 @@ public class MiioDeviceController: Logable {
         
     private struct _IndexedRequest: MiioRequest {
         private enum CodingKeys: String, CodingKey {
-            case method, id
-            case _params = "params"
+            case method, id, params
         }
                 
-        var method: Method
-        var params: ParamsConverible
-        var id: UInt
+        let method: Method
+        let params: ParamsConverible
+        let id: UInt
         init(request: MiioRequest,
              id: UInt) {
             method = request.method
@@ -75,7 +74,7 @@ public class MiioDeviceController: Logable {
     private var deviceUptime: UInt32 = 0
     private var serverStamp: TimeInterval = 0
     private var isDiscovering = false
-    private var device: Device
+    private let device: Device
     private let networkService: NetworkService
     
     private var handshakeTimer: DispatchSourceTimer?

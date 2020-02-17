@@ -28,6 +28,14 @@ public struct Method: RawRepresentable, Encodable, ExpressibleByStringLiteral {
     
 }
 
-extension Method {
-    public static var getProp: Method { return "get_prop" }
+public extension Method {
+    static var getProp: Method { return "get_prop" }
+    static var setPower: Method { "set_power" }
+    static var setMode: Method { "set_mode" }
+    static var setDry: Method { return "set_dry" }
+    static var setChildLock: Method { return "set_child_lock" }
+    static var setLimitHum: Method { return "set_limit_hum" }
+    static var setLevelFavorite: Method { return "set_level_favorite" }
+
+    
 }
